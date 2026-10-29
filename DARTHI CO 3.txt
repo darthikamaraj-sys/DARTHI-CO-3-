@@ -1,0 +1,171 @@
+1) #include <stdio.h>
+
+#define FIXED_CHARGE 50
+
+int main()
+{
+int household_no, previous, current, units;
+int category;
+float energy_charge, total;
+
+printf("Enter household number: ");
+scanf("%d", &household_no);
+
+printf("Enter category (1-Domestic, 2-Commercial): ");
+scanf("%d", &category);
+
+printf("Enter previous reading: ");
+scanf("%d", &previous);
+
+printf("Enter current reading: ");
+scanf("%d", &current);
+
+if (current < previous)
+{
+printf("Invalid meter readings!\n");
+return 1;
+}
+
+units = current - previous;
+
+if (category == 1)
+energy_charge = units * 5.0;
+else if (category == 2)
+energy_charge = units * 8.0;
+else
+{
+printf("Invalid category!\n");
+return 1;
+}
+
+total = energy_charge + FIXED_CHARGE;
+
+printf("\n--- Electricity Bill ---\n");
+printf("Household Number = %d\n", household_no);
+printf("Units Consumed = %d\n", units);
+printf("Energy Charge = Rs. %.2f\n", energy_charge);
+printf("Fixed Charge = Rs. %d\n", FIXED_CHARGE);
+printf("Total Bill = Rs. %.2f\n", total);
+
+return 0;
+}
+
+
+OUTPUT : 
+Enter household number: 101
+Enter category (1-Domestic, 2-Commercial): 1
+Enter previous reading: 1000
+Enter current reading: 1050
+
+--- Electricity Bill ---
+Household Number = 101
+Units Consumed = 50
+Energy Charge = Rs. 250.00
+Fixed Charge = Rs. 50
+Total Bill = Rs. 300.00
+
+
+
+
+
+2) #include <stdio.h>
+#include <limits.h>
+
+typedef unsigned short meter_t;
+
+unsigned int consumption(meter_t previous, meter_t current)
+{
+return (meter_t)(current - previous);
+}
+
+int main(void)
+{
+printf("sizeof(meter_t) = %zu bytes, maximum reading = %u\n",
+sizeof(meter_t), (unsigned)USHRT_MAX);
+
+printf("Consumption: %u units\n", consumption(1200, 1530));
+printf("Consumption: %u units\n", consumption(65400, 120));
+
+return 0;
+}
+
+
+OUTPUT:
+sizeof(meter_t) = 2 bytes, maximum reading = 65535
+Consumption: 330 units
+Consumption: 256 units
+
+
+
+3)#include <stdio.h>
+
+#define SLAB1_UNITS 100
+#define SLAB2_UNITS 200
+#define RATE1_PAISE 0
+#define RATE2_PAISE 225
+#define RATE3_PAISE 450
+#define FIXED_CHARGE_PAISE 5000L
+
+long compute_bill(int units)
+{
+long paise = FIXED_CHARGE_PAISE;
+
+if (units > SLAB1_UNITS && units <= SLAB2_UNITS)
+paise += (units - SLAB1_UNITS) * RATE2_PAISE;
+
+else if (units > SLAB2_UNITS)
+{
+paise += (SLAB2_UNITS - SLAB1_UNITS) * RATE2_PAISE;
+paise += (units - SLAB2_UNITS) * RATE3_PAISE;
+}
+
+return paise;
+}
+
+int main(void)
+{
+int tests[] = {0, 100, 150, 200, 350};
+int n = sizeof(tests) / sizeof(tests[0]);
+
+for (int i = 0; i < n; i++)
+{
+long p = compute_bill(tests[i]);
+printf("%3d units -> Rs %ld.%02ld\n",
+tests[i], p / 100, p % 100);
+}
+
+return 0;
+}
+
+
+OUTPUT:
+0 units -> Rs 50.00
+100 units -> Rs 50.00
+150 units -> Rs 162.50
+200 units -> Rs 275.00
+350 units -> Rs 950.00
+
+
+
+4) #include <stdio.h>
+
+#define SQUARE(x) ((x) * (x))
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define RUPEES_TO_PAISE(r) ((r) * 100)
+
+int main(void)
+{
+int a = 5, b = 10;
+int n = 4;
+
+printf("Square = %d\n", SQUARE(n));
+printf("Maximum = %d\n", MAX(a, b));
+printf("Rupees to paise = %d\n", RUPEES_TO_PAISE(50));
+
+return 0;
+}
+
+
+OUTPUT :  Square = 16
+Maximum = 10
+Rupees to paise = 5000
